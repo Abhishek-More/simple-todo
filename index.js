@@ -35,7 +35,7 @@ function errorLog(error) {
     console.log(err)
 }
 
-function addProj() {
+function newProject() {
     inquirer.prompt([{
         type: "input",
         name: "project",
@@ -46,6 +46,36 @@ function addProj() {
             name: projName,
             tasks: []
         }).write()
+    })
+}
+
+function newTask() {
+    inquirer.prompt([{
+        type: "input",
+        name: "task",
+        message: "task name?"
+    }]).then(name => {
+        taskName = name['project']
+        db.get('tasks').push({
+            task: taskName,
+            complete: false
+        }).write()
+    })
+}
+
+function chooseType() {
+    inquirer.prompt([{
+        type: "list",
+        name: "type",
+        message: "type?",
+        choices: ["task", "project", "cancel"]
+    }]).then(type => {
+        type = type["type"]
+        if(type = "project") {
+            newProject()
+        } else if (type == "task") {
+            newTask()
+        }
     })
 }
 
@@ -71,7 +101,7 @@ switch(args[2]) {
         usage()
         break
     case 'new':
-        addProj()
+        chooseType()
         break
     case 'ls':
         getProjList()
