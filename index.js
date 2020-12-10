@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 const chalk = require("chalk")
 const inquirer = require("inquirer")
 const low = require('lowdb')
@@ -72,10 +71,12 @@ function chooseType() {
         choices: ["task", "project", "cancel"]
     }]).then(type => {
         type = type["type"]
-        if(type = "project") {
+        if(type == "project") {
             newProject()
         } else if (type == "task") {
             newTask()
+        } else {
+            close()
         }
     })
 }
