@@ -12,6 +12,15 @@ const db = low(adapter)
 db.defaults({default: "", projects: []}).write()
 console.log()
 
+function projectExists(name) {
+    project = db.get('projects').find({name: name})
+
+    if (project) {
+        return true
+    }
+    return false
+}
+
 function getTasks() {
     let name = db.get('default').value()
     let project = db.get('projects').find({name: name})
@@ -26,17 +35,19 @@ function getTasks() {
 }
 
 function createProject() {
+    defaultProj = db.get('default').value()
     inquirer.prompt([{
         type: "input",
-        name: "task",
-        message: "project name?"
+        name: "project",
+        message: "project name"
     }]).then(name => {
-        taskName = name['project']
-        db.get('tasks').push({
-            task: taskName,
-            complete: false
+        projName = name['project']
+        db.get('projects').push({
+            name: projName,
+            tasks: []
         }).write()
     })
+
 }
 
 switch(args[2]) {
